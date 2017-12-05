@@ -11,7 +11,7 @@ module.exports = function(passport) {
     // validation step
     console.log('inside signup');
     User.create({username: req.body.username, password: req.body.password})
-      .then(()=>res.send('Success!')
+      .then(()=>res.send('Success!'))
       .catch(err=>console.log(err));
   });
 
