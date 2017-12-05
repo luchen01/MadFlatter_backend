@@ -9,13 +9,9 @@ module.exports = function(passport) {
 
   router.post('/signup', function(req, res) {
     // validation step
-    if (req.body.password!==req.body.passwordRepeat) {
-      return res.render('signup', {
-        error: "Passwords don't match."
-      });
-    }
+    console.log('inside signup');
     User.create({username: req.body.username, password: req.body.password})
-      .then((user)=>res.send(user))
+      .then(()=>res.send('Success!')
       .catch(err=>console.log(err));
   });
 
