@@ -1,7 +1,7 @@
 // Add Passport-related auth routes here.
 var express = require('express');
 var router = express.Router();
-var models = require('../models');
+var User = require('../models').User;
 
 module.exports = function(passport) {
 
@@ -17,19 +17,9 @@ module.exports = function(passport) {
         error: "Passwords don't match."
       });
     }
-    var u = new models.User({
-      username: req.body.username,
-      password: req.body.password
-    });
-    u.save(function(err, user) {
-      if (err) {
-        console.log(err);
-        res.status(500).redirect('/register');
-        return;
-      }
-      console.log(user);
-      res.redirect('/login');
-    });
+    User.create({username: req.body.username, password: req.body.password})
+      .then(()=>res.redirect('/login'))
+      .catch(err=>console.log(err));
   });
 
   // GET Login page

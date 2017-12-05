@@ -7,22 +7,33 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
-var mongoose = require('mongoose');
-var connect = process.env.MONGODB_URI;
+var db = require('./models');
+var User = require('./models').User;
 
-var REQUIRED_ENV = "SECRET MONGODB_URI".split(" ");
-
-REQUIRED_ENV.forEach(function(el) {
-  if (!process.env[el]){
-    console.error("Missing required env var " + el);
-    process.exit(1);
-  }
-});
+// REQUIRED_ENV.forEach(function(el) {
+//   if (!process.env[el]){
+//     console.error("Missing required env var " + el);
+//     process.exit(1);
+//   }
+// });
 
 
-mongoose.connect(connect);
-
-var models = require('./models');
+// const { Client } = require('pg');
+//
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: true,
+// });
+//
+// client.connect();
+//
+// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+//   if (err) throw err;
+//   for (let row of res.rows) {
+//     console.log(JSON.stringify(row));
+//   }
+//   client.end();
+// });
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
@@ -45,8 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport
 app.use(session({
-  secret: process.env.SECRET,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  secret: process.env.SECRET
 }));
 
 
@@ -54,33 +64,31 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, done) {
-  done(null, user._id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  models.User.findById(id, done);
+  User.findById(id)
+    .then((user)=>{
+      done(null, user);
+    })
+    .catch((err)=>done(err, null));
 });
 
 // passport strategy
 passport.use(new LocalStrategy(function(username, password, done) {
   // Find the user with the given username
-  models.User.findOne({ username: username }, function (err, user) {
-    // if there's an error, finish trying to authenticate (auth failed)
-    if (err) {
-      console.error('Error fetching user in LocalStrategy', err);
-      return done(err);
-    }
-    // if no user present, auth failed
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-    // if passwords do not match, auth failed
-    if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    // auth has has succeeded
-    return done(null, user);
-  });
+  User.findOne({
+    where: {username: username}})
+    .then(user=>{
+      console.log("find User", user);
+      if(user.password === password){
+        return done(null, user);
+      }else{
+        return done(null, false);
+      }
+    })
+    .catch(err=>console.log(err));
 }
 ));
 
@@ -118,8 +126,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var port = process.env.PORT || 3000;
-app.listen(port);
-console.log('Express started. Listening on port %s', port);
+db.sequelize.sync().then(function(){
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+  console.log('Express started. Listening on port %s', port);
+})
+
 
 module.exports = app;
