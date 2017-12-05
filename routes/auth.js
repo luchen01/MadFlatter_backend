@@ -6,9 +6,6 @@ var User = require('../models').User;
 module.exports = function(passport) {
 
   // GET registration page
-  router.get('/signup', function(req, res) {
-    res.render('signup');
-  });
 
   router.post('/signup', function(req, res) {
     // validation step
@@ -18,25 +15,21 @@ module.exports = function(passport) {
       });
     }
     User.create({username: req.body.username, password: req.body.password})
-      .then(()=>res.redirect('/login'))
+      .then((user)=>res.send(user))
       .catch(err=>console.log(err));
   });
 
   // GET Login page
-  router.get('/login', function(req, res) {
-    res.render('login');
-  });
 
   // POST Login page
-  router.post('/login', passport.authenticate('local',{
-    successRedirect: '/protected',
-    failureRedirect: '/login'
+  router.post('/login', passport.authenticate('local'),function(req, res){
+    res.send(req.user);
   }));
 
   // GET Logout page
   router.get('/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.send('logout successful!')
   });
 
   return router;
