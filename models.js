@@ -52,27 +52,43 @@ const User = sequelize.define('user', {
   },
   username: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true
   },
   password: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: true
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true
   },
   birthday: {
     type: Sequelize.DATE,
-    allowNull: false
+    allowNull: true
+  },
+  gender: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  profileUrl:{
+    type: Sequelize.STRING,
+    allowNull: true
   },
   facebookId: {
     type: Sequelize.STRING,
     allowNull: true
   },
   googleId: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  facebookToken: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  googleToken: {
     type: Sequelize.STRING,
     allowNull: true
   }

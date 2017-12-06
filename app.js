@@ -98,34 +98,46 @@ passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:3000/auth/facebook/callback",
-    profileFields: ['id','first_name', 'last_name','gender', 'name', 'email','birthday']
+    profileFields: ['id','first_name', 'last_name','gender', 'email','birthday', 'hometown', 'education']
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log('profile', profile);
-    User.findOrCreate({
-      where: {facebookId: profile.id,
-        firstname: profile.first_name,
-        lastname: profile.last_name,
-        username: profile.name,
-        email: profile.email,
-        birthday: profile.birthday
-      } }, function (err, user) {
-      return cb(err, user);
-    });
+    User.create({facebookId: profile.id,
+        facebookToken: accessToken,
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
+        username: profile.username,
+        gender: profile.gender,
+        profileUrl: profile.profileUrl
+        // email: profile.email,
+        // birthday: profile.birthday
+      })
+      .then(user=>cb(null, user))
+    .catch(err=>cb(err, null));
   }
 ));
 
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.GOOGLE_CLIENT_ID,
-//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     callbackURL: "http://www.example.com/auth/google/callback"
-//   },
-//   function(accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    console.log('profile from google', profile);
+    User.create({googleId: profile.id,
+        googleToken: accessToken,
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
+        username: profile.username,
+        gender: profile.gender,
+        profileUrl: profile.photos[0].value
+        // email: profile.email,
+        // birthday: profile.birthday
+      })
+      .then(user=>cb(null, user))
+    .catch(err=>cb(err, null));
+  }
+));
 
 app.use('/', auth(passport));
 app.use('/', routes);
