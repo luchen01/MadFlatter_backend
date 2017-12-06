@@ -32,7 +32,7 @@ module.exports = function(passport) {
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
     console.log('inside facebook callback');
-    res.send("success");
+    res.json({success: true});
   })
 
   router.get('/auth/google',
@@ -42,7 +42,7 @@ module.exports = function(passport) {
     passport.authenticate('google'),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.send("profile created through Google");
+      res.json({success: true});
     });
 
 
