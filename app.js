@@ -7,6 +7,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var db = require('./models');
 var User = require('./models').User;
 
@@ -92,6 +94,31 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }
 ));
 
+passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['id','first_name', 'last_name','gender', 'name', 'email','birthday']
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+// passport.use(new GoogleStrategy({
+//     clientID: process.env.GOOGLE_CLIENT_ID,
+//     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//     callbackURL: "http://www.example.com/auth/google/callback"
+//   },
+//   function(accessToken, refreshToken, profile, cb) {
+//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
+//       return cb(err, user);
+//     });
+//   }
+// ));
+
 app.use('/', auth(passport));
 app.use('/', routes);
 
@@ -126,7 +153,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.sequelize.sync().then(function(){
+db.sequelize.sync({force: true}).then(function(){
   var port = process.env.PORT || 3000;
   app.listen(port);
   console.log('Express started. Listening on port %s', port);

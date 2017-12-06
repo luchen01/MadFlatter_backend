@@ -9,8 +9,15 @@ module.exports = function(passport) {
 
   router.post('/signup', function(req, res) {
     // validation step
-    console.log('inside signup');
-    User.create({username: req.body.username, password: req.body.password})
+    console.log('req.body', req.body);
+    User.create({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email,
+      birthday: req.body.birthday
+    })
       .then(()=>res.send('Success!'))
       .catch(err=>console.log(err));
   });
@@ -21,6 +28,22 @@ module.exports = function(passport) {
   router.post('/login', passport.authenticate('local'),function(req, res){
     res.send(req.user);
   });
+
+  router.get('/auth/facebook', passport.authenticate('facebook'));
+  router.get('/auth/facebook/callback', passport.authenticate('facebook'), function(req, res){
+    res.send(req.user);
+  })
+
+  router.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile'] }));
+
+  router.get('/auth/google/callback',
+    passport.authenticate('google'),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      res.send(req.user);
+    });
+
 
   // GET Logout page
   router.get('/logout', function(req, res) {

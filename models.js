@@ -41,6 +41,15 @@ if (!global.hasOwnProperty('db')) {
 // YOUR CODE HERE
 
 const User = sequelize.define('user', {
+  firstname: {
+    type: Sequelize.STRING,
+    allowNull: false
+    // unique: true
+  },
+  lastname: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   username: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -48,6 +57,15 @@ const User = sequelize.define('user', {
   },
   password: {
     type: Sequelize.STRING,
+    allowNull: false
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  birthday: {
+    type: Sequelize.DATE,
     allowNull: false
   }
 });
