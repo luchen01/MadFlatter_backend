@@ -101,7 +101,15 @@ passport.use(new FacebookStrategy({
     profileFields: ['id','first_name', 'last_name','gender', 'name', 'email','birthday']
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    console.log('profile', profile);
+    User.findOrCreate({
+      where: {facebookId: profile.id,
+        firstname: profile.first_name,
+        lastname: profile.last_name,
+        username: profile.name,
+        email: profile.email,
+        birthday: profile.birthday
+      } }, function (err, user) {
       return cb(err, user);
     });
   }

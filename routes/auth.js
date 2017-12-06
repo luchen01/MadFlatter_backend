@@ -31,7 +31,8 @@ module.exports = function(passport) {
 
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook'), function(req, res){
-    res.send(req.user);
+    console.log('inside facebook callback');
+    res.send("success");
   })
 
   router.get('/auth/google',

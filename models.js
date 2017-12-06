@@ -67,6 +67,14 @@ const User = sequelize.define('user', {
   birthday: {
     type: Sequelize.DATE,
     allowNull: false
+  },
+  facebookId: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  googleId: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 });
 
