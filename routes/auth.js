@@ -32,6 +32,8 @@ module.exports = function(passport) {
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
     console.log('inside facebook callback');
+    // res.send("requser", req.user);
+    console.log("req.user inside facebook cb", req.user)
     res.redirect("http://localhost:3000/#/profile");
   })
 
@@ -42,6 +44,7 @@ module.exports = function(passport) {
     passport.authenticate('google'),
     function(req, res) {
       // Successful authentication, redirect home.
+      console.log("req.user inside facebook cb", req.user)
       res.redirect("http://localhost:3000/#/profile");
     });
 
