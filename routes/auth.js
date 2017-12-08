@@ -31,20 +31,20 @@ module.exports = function(passport) {
 
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
-    console.log('inside facebook callback');
+    // console.log('inside facebook callback');
     // res.send("requser", req.user);
     console.log("req.user inside facebook cb", req.user)
     res.redirect("http://localhost:3000/#/profile");
   })
 
   router.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile'] }));
+    passport.authenticate('google', { scope: ['profile', "https://www.googleapis.com/auth/userinfo.email"] }));
 
   router.get('/auth/google/callback',
     passport.authenticate('google'),
     function(req, res) {
       // Successful authentication, redirect home.
-      console.log("req.user inside facebook cb", req.user)
+      console.log("req.user inside google cb", req.user)
       res.redirect("http://localhost:3000/#/profile");
     });
 
