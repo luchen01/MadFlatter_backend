@@ -39,6 +39,7 @@ var User = require('./models').User;
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
+var scraper = require('./routes/scraper');
 var app = express();
 
 // view engine setup
@@ -141,6 +142,7 @@ passport.use(new GoogleStrategy({
 
 app.use('/', auth(passport));
 app.use('/', routes);
+app.use('/', scraper);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
