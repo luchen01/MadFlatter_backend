@@ -83,7 +83,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
   User.findOne({
     where: {username: username}})
     .then(user=>{
-      console.log("find User", user);
       if(user.password === password){
         return done(null, user);
       }else{

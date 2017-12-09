@@ -10,6 +10,15 @@ router.get('/', function(req, res, next) {
   res.render('home');
 });
 
+router.post('/myprofile', function(req, res){
+  console.log('insidemyprofile');
+  User.findById(req.body.userid)
+  .then(user=>{
+    console.log('user', user);
+    res.send(user)
+  })
+  .catch(err=>console.log(err))
+})
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
 // router.use(function(req, res, next){
