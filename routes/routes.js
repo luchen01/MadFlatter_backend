@@ -6,28 +6,22 @@ var User = models.User;
 //////////////////////////////// PUBLIC ROUTES ////////////////////////////////
 // Users who are not logged in can see these routes
 
-router.get('/', function(req, res, next) {
-  res.render('home');
-});
+// router.get('/', function(req, res, next) {
+//   res.render('home');
+// });
 
-router.post('/myprofile', function(req, res){
-  console.log('insidemyprofile');
-  User.findById(req.body.userid)
-  .then(user=>{
-    console.log('user', user);
-    res.send(user)
-  })
-  .catch(err=>console.log(err))
-})
+
+
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
-// router.use(function(req, res, next){
-//   if (!req.user) {
-//     res.redirect('/login');
-//   } else {
-//     return next();
-//   }
-// });
+router.use(function(req, res, next){
+  if (!req.user) {
+    res.redirect("http://localhost:3030/#/login/");
+  } else {
+    return next();
+  }
+});
+
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes

@@ -1,6 +1,7 @@
 var express = require('express');
+var Sequelize = require('sequelize')
 var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -11,32 +12,7 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var db = require('./models');
 var User = require('./models').User;
-
-// REQUIRED_ENV.forEach(function(el) {
-//   if (!process.env[el]){
-//     console.error("Missing required env var " + el);
-//     process.exit(1);
-//   }
-// });
-
-
-// const { Client } = require('pg');
-//
-// const client = new Client({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: true,
-// });
-//
-// client.connect();
-//
-// client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-//   if (err) throw err;
-//   for (let row of res.rows) {
-//     console.log(JSON.stringify(row));
-//   }
-//   client.end();
-// });
-
+var sequelize = require('./models').sequelize;
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
 var app = express();
@@ -58,7 +34,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport
 app.use(session({
-  secret: process.env.SECRET
+  secret: process.env.SECRET,
+  store: new SequelizeStore({
+    db: sequelize
+  }),
+  resave: false, // we support the touch method so per the express-session docs this should be set to false
+  proxy: true // if you do SSL outside of node.
 }));
 
 
@@ -100,7 +81,6 @@ passport.use(new FacebookStrategy({
     profileFields: ['id','first_name', 'last_name','gender', 'email','birthday', 'hometown', 'education']
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log('profile', profile);
     User.create({facebookId: profile.id,
         facebookToken: accessToken,
         firstname: profile.name.givenName,
@@ -122,7 +102,6 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log('profile from google', profile);
     User.create({googleId: profile.id,
         googleToken: accessToken,
         firstname: profile.name.givenName,
