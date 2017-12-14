@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
-var User = models.User;
+var apartmentsApi = require('./apartmentsApi');
+
 
 //////////////////////////////// PUBLIC ROUTES ////////////////////////////////
 // Users who are not logged in can see these routes
@@ -31,6 +32,9 @@ router.get('/protected', function(req, res, next) {
     username: req.user.username,
   });
 });
+
+router.use('/', apartmentsApi);
+
 
 ///////////////////////////// END OF PRIVATE ROUTES /////////////////////////////
 
