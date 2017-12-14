@@ -14,10 +14,12 @@ router.post('/apartmentsByLocation', (req, res) => {
     bedsMin: 0,
     bedsMax: 999999,
     bathsMin: 0,
-    bathsMax: 999999
+    bathsMax: 999999,
+    dateAvailableStart: new Date(0),
+    dateAvailableEnd: new Date(1613225248000),
   }
   let searchFilters = Object.assign({}, req.body.searchFilters);
-  Object.keys(searchFilters).map((filter) => {
+  Object.keys(defaultFilters).map((filter) => {
     searchFilters[filter] = (!req.body.searchFilters[filter] || isNaN(req.body.searchFilters[filter]))
      ? defaultFilters[filter]
      : searchFilters[filter];
@@ -48,10 +50,14 @@ router.post('/apartmentsByLocation', (req, res) => {
       },
       price: {
         [Op.between]: [searchFilters.priceMin, searchFilters.priceMax]
+      },
+      dateAvailable: {
+        [Op.between]: [searchFilters.dateAvailableStart, searchFilters.dateAvailableEnd]
       }
     }
   })
   .then((apartments) => {
+    console.log(searchFilters.dateAvailableStart, searchFilters.dateAvailableEnd, apartments);
     res.json({
       apartments
     })

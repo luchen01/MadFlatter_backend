@@ -33,6 +33,7 @@ const scraper = async () => {
       var dateAvailable = (third ?
         $('.attrgroup').children('.shared-line-bubble').first().next().next().attr('data-date') :
         $('.attrgroup').children('.shared-line-bubble').first().next().attr('data-date'));
+      dateAvailable = dateAvailable ? (new Date(dateAvailable)).getTime() : null;
       var address = $('.mapaddress').toArray().length < 2 ? null : $('.mapaddress').first().text();
       let latitude = parseFloat($('#map').attr('data-latitude'));
       let longitude = parseFloat($('#map').attr('data-longitude'));
@@ -53,7 +54,7 @@ const scraper = async () => {
             beds: !isNaN(beds) ? beds : null,
             baths: !isNaN(baths) ? baths : null,
             area: (!isNaN(area) && area )? parseInt(area) : null,
-            dateAvailable: dateAvailable ? dateAvailable : null,
+            dateAvailable: dateAvailable,
             price: !isNaN(price) ? price : null
         })
       .then(async (apartment) => {
