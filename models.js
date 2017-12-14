@@ -100,6 +100,10 @@ const User = sequelize.define('user', {
 });
 
 const Apartment = sequelize.define('apartment', {
+    id: {
+      type: Sequelize.BIGINT,
+      primaryKey: true
+    },
     address: {
       type: Sequelize.STRING
     },
@@ -128,7 +132,7 @@ const Apartment = sequelize.define('apartment', {
       type: Sequelize.TEXT
     },
     price: {
-      type: Sequelize.INTEGER
+      type: Sequelize.FLOAT
     },
     timePosted: {
       type: Sequelize.STRING
