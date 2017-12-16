@@ -15,6 +15,7 @@ var User = require('./models').User;
 var sequelize = require('./models').sequelize;
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
+var scraper = require('./routes/scraper');
 var app = express();
 // var io = require('socket.io')(server);
 
@@ -142,6 +143,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 app.use('/', auth(passport));
 app.use('/', routes);
+app.use('/', scraper);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

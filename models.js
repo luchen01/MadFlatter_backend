@@ -1,10 +1,10 @@
 "use strict";
 
 // On Windows we needa DBPASSWORD
-// if (/^win/.test(process.platform) && ! process.env.DATABASE_URL) {
-//   console.log('You need to set DBURL in your env.sh file');
-//   process.exit(1);
-// }
+if (/^win/.test(process.platform) && ! process.env.DATABASE_URL) {
+  console.log('You need to set DBURL in your env.sh file');
+  process.exit(1);
+}
 
 if (!global.hasOwnProperty('db')) {
   var Sequelize = require('sequelize')
@@ -27,7 +27,12 @@ if (!global.hasOwnProperty('db')) {
     sequelize = new Sequelize('example-app-db', 'root', null)
   }
 
-
+// var Sequelize = require('sequelize');
+// var sequelize = new Sequelize(process.env.DATABASE_NAME, 'postgres', process.env.DATABASE_PASSWORD, {
+//     dialect: 'postgres',
+//     logging: false
+// });
+//
 // sequelize
 //   .authenticate()
 //   .then(() => {
@@ -99,13 +104,59 @@ const User = sequelize.define('user', {
 });
 
 const Apartment = sequelize.define('apartment', {
-  roomtype: {
+    id: {
+      type: Sequelize.BIGINT,
+      primaryKey: true
+    },
+    address: {
+      type: Sequelize.STRING
+    },
+    area: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    },
+    baths: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    beds: {
+      type: Sequelize.INTEGER,
+      allowNull: true
+    },
+    dateAvailable: {
+      type: Sequelize.DATE
+    },
+    lat: {
+      type: Sequelize.FLOAT
+    },
+    lng: {
+      type: Sequelize.FLOAT
+    },
+    postBody: {
+      type: Sequelize.TEXT
+    },
+    price: {
+      type: Sequelize.FLOAT
+    },
+    timePosted: {
+      type: Sequelize.STRING
+    },
+    title: {
+      type: Sequelize.STRING
+    }
+  }
+);
+
+const AptPicture = sequelize.define('aptpicture', {
+  url: {
     type: Sequelize.STRING,
     allowNull: false
   }
-});
+})
 
-Apartment.belongsTo(User);
+Apartment.belongsTo(User, {foreignKey: 'poster_id'});
+AptPicture.belongsTo(Apartment, {foreignKey: 'apartment_id'});
+
 
 
 module.exports = {
@@ -113,6 +164,7 @@ module.exports = {
   // YOUR CODE HERE
   User,
   Apartment,
+  AptPicture,
   sequelize,
   Sequelize
 };

@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
-var User = models.User;
+var apartmentsApi = require('./apartmentsApi');
+
 
 //////////////////////////////// PUBLIC ROUTES ////////////////////////////////
 // Users who are not logged in can see these routes
