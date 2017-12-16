@@ -10,13 +10,13 @@ var User = models.User;
 //   res.render('home');
 // });
 
-
-
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
 router.use(function(req, res, next){
   if (!req.user) {
-    res.redirect("http://localhost:3030/#/login/");
+    console.log('not req.user');
+    // res.redirect("http://localhost:3030/#/");
+    res.json({success: false, message: 'req.user not found'})
   } else {
     return next();
   }
@@ -31,6 +31,43 @@ router.get('/protected', function(req, res, next) {
     username: req.user.username,
   });
 });
+
+router.post('/myprofile', function(req, res){
+  console.log("inside my profile", req.body)
+  User.findById(req.body.userid)
+  .then(user=>{
+    res.send(user)
+  })
+  .catch(err=>console.log(err))
+})
+
+router.post('/saveedit', function(req, res){
+  console.log('inside save edit', req.body);
+  User.update({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    username: req.body.username,
+    email: req.body.email,
+    birthday: req.body.birthday,
+  }, {where: {id: req.body.userid}})
+  .then(resp=>{
+    console.log("resp in saved", resp);
+    res.send(resp);
+  })
+  .catch(err=>console.log(err))
+})
+
+router.post('/leavegroup', function(req, res){
+  console.log("inside leave group", req.body, req.user);
+  User.update({
+    groupId: null
+  }, {where: {id: req.user.id}})
+  .then(resp=>{
+    console.log("resp in saved", resp);
+  })
+  .catch(err=>console.log(err))
+})
+
 
 ///////////////////////////// END OF PRIVATE ROUTES /////////////////////////////
 

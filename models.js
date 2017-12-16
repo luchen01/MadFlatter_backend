@@ -65,7 +65,7 @@ const User = sequelize.define('user', {
     unique: true
   },
   birthday: {
-    type: Sequelize.DATE,
+    type: Sequelize.DATEONLY,
     allowNull: true
   },
   gender: {
@@ -90,6 +90,10 @@ const User = sequelize.define('user', {
   },
   googleToken: {
     type: Sequelize.STRING,
+    allowNull: true
+  },
+  groupId: {
+    type: Sequelize.INTEGER,
     allowNull: true
   }
 });
