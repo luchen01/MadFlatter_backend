@@ -28,8 +28,9 @@ module.exports = function(passport) {
   // POST Login page
   router.post('/login', passport.authenticate('local'), function(req, res){
     console.log('in post login', req.user);
-    res.send(req.user);
+    res.json({success: true, user: req.user});
   });
+
 
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
@@ -45,14 +46,7 @@ module.exports = function(passport) {
       res.redirect("http://localhost:3030/#/profile/" + req.user.dataValues.id);
     });
 
-    // router.get('/loggedin', function(req, res, next){
-    //   console.log('inside get logged in', req.user);
-    //   if(req.user){
-    //     res.send('true')
-    //   }else{
-    //     res.send('false')
-    //   }
-    // })
+
 
   // GET Logout page
   router.get('/logout', function(req, res) {

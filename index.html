@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cool</title>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      axios.defaults.withCredentials = true;
+      axios.post('http://localhost:3000/login', {
+        username: 'luchen',
+        password: '123',
+      })
+      .then(console.log)
+      .catch(console.error);
+    </script>
+  </body>
+</html>

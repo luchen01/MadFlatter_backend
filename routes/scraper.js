@@ -107,7 +107,7 @@ const scraper = async () => {
     }
 
     const awaitPage = async (fn, offset) => {
-      while(!isNaN(offset)){
+      while(!isNaN(offset) && offset < 500){
         offset = await fn(offset);
         console.log(offset);
       }

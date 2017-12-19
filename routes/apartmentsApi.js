@@ -87,4 +87,32 @@ router.get('/apartment/:id', async (req, res) => {
   })
 })
 
+// router.get('/allapartment', async (req, res)=>{
+//     var aptAll = await Apartment.findAll({limit: 10})
+//     .map(apt=>{
+//       return AptPicture.findOne({
+//         where: {
+//           apartment_id: apt.id
+//         }
+//       })
+//       .then((photo)=>{
+//         console.log('all apartment picture', photo);
+//         return Object.assign({}, apt, {pictures: photo})
+//       })
+//
+//     })
+//     console.log(aptAll);
+//     res.send(aptAll);
+//
+// })
+
+// router.post('/apartmentprofile', function(req, res){
+//   console.log('inside find apartment profile req.body', req.body);
+//   Apartment.findById(req.body.aptid)
+//   .then(apt=>{
+//     res.send(apt)
+//   })
+//   .catch(err=>console.log(err))
+// })
+
 module.exports = router;

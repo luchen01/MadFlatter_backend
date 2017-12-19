@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
+var User = require('../models').User;
 var apartmentsApi = require('./apartmentsApi');
 
 
@@ -14,29 +15,23 @@ var apartmentsApi = require('./apartmentsApi');
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
 router.use(function(req, res, next){
-  if (!req.user) {
-    console.log('not req.user');
-    // res.redirect("http://localhost:3030/#/");
-    res.json({success: false, message: 'req.user not found'})
+  if (!req.user && req.method !== 'OPTIONS') {
+    console.log('not req.userrrrrrrrrrrrrrrrr');
+    res.status(404).json({success: false, message: 'req.user not found'})
   } else {
+    console.log('returning next', req.user);
     return next();
   }
 });
 
-
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes
-
-router.get('/protected', function(req, res, next) {
-  res.render('protectedRoute', {
-    username: req.user.username,
-  });
-});
 
 router.post('/myprofile', function(req, res){
   console.log("inside my profile", req.body)
   User.findById(req.body.userid)
   .then(user=>{
+    // console.log('find user', user);
     res.send(user)
   })
   .catch(err=>console.log(err))
