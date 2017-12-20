@@ -12,11 +12,18 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var db = require('./models');
 var User = require('./models').User;
+var Apartment = require('./models').Apartment;
+var AptPicture = require('./models').AptPicture;
 var sequelize = require('./models').sequelize;
+// var cors = require('cors');
+
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
 var scraper = require('./routes/scraper');
-var cors = require("cors");
+var apt = require('./routes/apartmentsApi');
+var socket = require('./routes/socket');
+
+// var scraper = require('./routes/scraper');
 var app = express();
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3030");
@@ -24,6 +31,38 @@ app.use(function(req, res, next) {
   next();
 });
 
+
+// app.use(cors({
+//   origin: '*',
+//   credentials: true
+// }));
+
+app.use(function(req, res, next){
+  // res.header("Access-Control-Allow-Origin", "http://www.google.com");
+  // res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, content-type, Accept');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+})
+// app.use(function(req, res, next) {
+//   console.log('inside access-control headers origin', req.headers.origin);
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Origin', req.headers.origin);
+//   res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
+//   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+//   // console.log('res inside access control', res.header);
+//   if ('OPTIONS' == req.method) {
+//     res.sendStatus(200);
+//   } else {
+//
+//     next();
+//   }
+// })
 
 // view engine setup
 var hbs = require('express-handlebars')({
@@ -35,21 +74,25 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 app.use(logger('tiny'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Passport
 app.use(session({
   secret: process.env.SECRET,
+  cookie: {
+    secure: false,
+    httpOnly: false
+  },
   store: new SequelizeStore({
     db: sequelize
   }),
-  resave: false, // we support the touch method so per the express-session docs this should be set to false
+  resave: true,
+  saveUninitialized: false,// we support the touch method so per the express-session docs this should be set to false
   proxy: true // if you do SSL outside of node.
 }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -63,8 +106,12 @@ passport.deserializeUser(function(id, done) {
     .then((user)=>{
       done(null, user);
     })
-    .catch((err)=>done(err, null));
+    .catch((err)=>{
+      done(err, null)
+    });
 });
+
+// Passport
 
 // passport strategy
 passport.use(new LocalStrategy(function(username, password, done) {
@@ -78,7 +125,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
         return done(null, false);
       }
     })
-    .catch(err=>console.log(err));
+    .catch(err=> {
+      console.log('error findone user', err)
+      return done(err)
+    });
 }
 ));
 
@@ -95,7 +145,8 @@ passport.use(new FacebookStrategy({
         lastname: profile.name.familyName,
         username: profile.username,
         gender: profile.gender,
-        profileUrl: profile.profileUrl
+        profileUrl: profile.profileUrl,
+        groupId: 1
         // email: profile.email,
         // birthday: profile.birthday
       })
@@ -116,7 +167,8 @@ passport.use(new GoogleStrategy({
         lastname: profile.name.familyName,
         username: profile.username,
         gender: profile.gender,
-        profileUrl: profile.photos[0].value
+        profileUrl: profile.photos[0].value,
+        groupId: 1,
         // email: profile.email,
         // birthday: profile.birthday
       })
@@ -125,9 +177,18 @@ passport.use(new GoogleStrategy({
   }
 ));
 
- // app.use(cors());
+// io.on('connection', function(socket){
+// });
+
+app.get('/loggedin', function(req, res, next){
+  console.log('inside get logged in', req.user);
+    res.send(req.user);
+})
+
 app.use('/', auth(passport));
 app.use('/', routes);
+app.use('/', apt);
+app.use('/', socket);
 app.use('/', scraper);
 
 // catch 404 and forward to error handler
@@ -161,11 +222,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.sequelize.sync({force: true}).then(function(){
+// db.sequelize.sync({force: true}).then(function(){
   var port = process.env.PORT || 3000;
   app.listen(port);
   console.log('Express started. Listening on port %s', port);
-})
+// })
 
 
 module.exports = app;

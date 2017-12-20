@@ -70,7 +70,7 @@ const User = sequelize.define('user', {
     unique: true
   },
   birthday: {
-    type: Sequelize.DATE,
+    type: Sequelize.DATEONLY,
     allowNull: true
   },
   gender: {
@@ -95,6 +95,10 @@ const User = sequelize.define('user', {
   },
   googleToken: {
     type: Sequelize.STRING,
+    allowNull: true
+  },
+  groupId: {
+    type: Sequelize.INTEGER,
     allowNull: true
   }
 });
@@ -148,11 +152,95 @@ const AptPicture = sequelize.define('aptpicture', {
     type: Sequelize.STRING,
     allowNull: false
   }
-})
+});
 
 Apartment.belongsTo(User, {foreignKey: 'poster_id'});
 AptPicture.belongsTo(Apartment, {foreignKey: 'apartment_id'});
 
+const Questionnaire = sequelize.define('questionnaire', {
+  q1: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q2: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q3: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q4: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q5: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q6: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q7: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q8: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q9: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q10: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q11: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q12: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q13: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q14: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q15: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q16: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q17: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q18: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q19: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  },
+  q20: {
+    type: Sequelize.INTEGER,
+    allowNull:true
+  }
+});
+
+Questionnaire.belongsTo(User, {foreignKey: 'user_id'});
 
 module.exports = {
   // Export models here
