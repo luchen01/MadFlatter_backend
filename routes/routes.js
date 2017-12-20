@@ -12,6 +12,23 @@ var apartmentsApi = require('./apartmentsApi');
 //   res.render('home');
 // });
 
+<<<<<<< HEAD
+router.get('/hello', (req, res) => {
+  res.json({
+    message: true
+  })
+})
+
+///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
+
+// router.use(function(req, res, next){
+//   if (!req.user) {
+//     res.redirect("http://localhost:3030/#/login/");
+//   } else {
+//     return next();
+//   }
+// });
+=======
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
 router.use(function(req, res, next){
@@ -23,6 +40,7 @@ router.use(function(req, res, next){
     return next();
   }
 });
+>>>>>>> master
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes

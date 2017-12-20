@@ -19,11 +19,18 @@ var sequelize = require('./models').sequelize;
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
+var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
 var socket = require('./routes/socket');
 
 // var scraper = require('./routes/scraper');
 var app = express();
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3030");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 
 // app.use(cors({
 //   origin: '*',
@@ -182,7 +189,7 @@ app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', apt);
 app.use('/', socket);
-// app.use('/', scraper);
+app.use('/', scraper);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

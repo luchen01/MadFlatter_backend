@@ -6,6 +6,7 @@ var User = require('../models').User;
 module.exports = function(passport) {
 
   // GET registration page
+  
 
   router.post('/signup', function(req, res) {
     // validation step

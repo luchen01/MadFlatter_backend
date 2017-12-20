@@ -56,10 +56,27 @@ router.post('/apartmentsByLocation', (req, res) => {
       }
     }
   })
-  .then((apartments) => {
+  .then(async (apartments) => {
     console.log(searchFilters.dateAvailableStart, searchFilters.dateAvailableEnd, apartments);
+    var apts = await Promise.all(apartments.map((apt) => {
+      try{
+        return AptPicture.findAll({
+          where: {
+            apartment_id: apt.id
+          },
+          limit: 1
+        }).then((pics) => {
+          return Object.assign({}, apt.dataValues, {picture: pics[0] ?
+              pics[0].dataValues.url :
+             'https://ssl.cdn-redfin.com/v186.4.0/images/no_photo_available_large.png'})
+        })
+      }
+      catch (e) {
+        console.log(e);
+      }
+    }))
     res.json({
-      apartments
+      apartments: apts
     })
   })
   .catch((err) => {
