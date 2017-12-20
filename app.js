@@ -16,7 +16,14 @@ var sequelize = require('./models').sequelize;
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
 var scraper = require('./routes/scraper');
+var cors = require("cors");
 var app = express();
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3030");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 
 // view engine setup
 var hbs = require('express-handlebars')({
@@ -118,6 +125,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+ // app.use(cors());
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', scraper);

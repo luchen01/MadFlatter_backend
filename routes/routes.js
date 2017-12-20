@@ -11,17 +11,21 @@ var apartmentsApi = require('./apartmentsApi');
 //   res.render('home');
 // });
 
-
+router.get('/hello', (req, res) => {
+  res.json({
+    message: true
+  })
+})
 
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
-router.use(function(req, res, next){
-  if (!req.user) {
-    res.redirect("http://localhost:3030/#/login/");
-  } else {
-    return next();
-  }
-});
+// router.use(function(req, res, next){
+//   if (!req.user) {
+//     res.redirect("http://localhost:3030/#/login/");
+//   } else {
+//     return next();
+//   }
+// });
 
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////

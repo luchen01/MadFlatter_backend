@@ -12,12 +12,12 @@ const scraper = async () => {
     where:{},
     truncate: true
   });
-  console.log('here');
+  console.log('AptPicture table destroyed');
   Apartment.destroy({
     where: { },
     // truncate: true
   }).then( async ()=>{
-
+    console.log('Apartment table destroyed');
     var offset = 0;
     var apartments = [];
 
@@ -67,7 +67,12 @@ const scraper = async () => {
               apartment_id: apartment.id
             })
           })
-          await AptPicture.bulkCreate(pics);
+          try {
+            await AptPicture.bulkCreate(pics);
+          }
+          catch (e) {
+            console.log('Error bulk creating', e);
+          }
         }
         return apartment;
       })
@@ -98,7 +103,6 @@ const scraper = async () => {
             offset = apartments.length < 120 ? 'finished' : offset + 120;
             return offset;
           })
-          .catch((err) => console.log(err));
         })
       } catch (e) {
         console.log('failed call', e);
@@ -107,7 +111,7 @@ const scraper = async () => {
     }
 
     const awaitPage = async (fn, offset) => {
-      while(!isNaN(offset)){
+      while(!isNaN(offset) && offset < 500){
         offset = await fn(offset);
         console.log(offset);
       }
@@ -115,6 +119,7 @@ const scraper = async () => {
     try{
       await awaitPage(getPage, offset);
     } catch (e) {
+      console.log('problem:', e);
       scraper();
     }
   })
