@@ -3,7 +3,7 @@ var router = express.Router();
 var models = require('../models');
 var { User, Apartment, AptPicture } = models;
 const Op = models.sequelize.Op;
-
+console.log('in apartmentsAPI');
 router.post('/apartmentsByLocation', (req, res) => {
   console.log('in apartmentsByLocation');
   const defaultFilters = {
