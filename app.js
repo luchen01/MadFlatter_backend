@@ -18,7 +18,7 @@ var sequelize = require('./models').sequelize;
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
-var scraper = require('./routes/scraper');
+// var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
 var questionnaire = require('./routes/questionnaire');
 var region = require('./routes/region');
@@ -167,6 +167,7 @@ passport.use(new GoogleStrategy({
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', apt);
+app.use('/', socket);
 // app.use('/', scraper);
 app.use('/', questionnaire);
 app.use('/', region);
