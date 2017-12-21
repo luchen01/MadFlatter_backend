@@ -200,13 +200,36 @@ const Questionnaire = sequelize.define('questionnaire', {
     '20_others': Sequelize.INTEGER
 });
 
+const Region = sequelize.define('regions', {
+    north: Sequelize.FLOAT,
+    south: Sequelize.FLOAT,
+    east: Sequelize.FLOAT,
+    west: Sequelize.FLOAT,
+    time: Sequelize.BIGINT
+});
+
+const AptFilter = sequelize.define('aptfilter', {
+    maxBed: Sequelize.INTEGER,
+    minBed: Sequelize.INTEGER,
+    maxBath: Sequelize.INTEGER,
+    minBath: Sequelize.INTEGER,
+    maxDate: Sequelize.DATE,
+    minDate: Sequelize.DATE,
+    minPrice: Sequelize.INTEGER,
+    maxPrice: Sequelize.INTEGER,
+})
+
 Questionnaire.belongsTo(User, {foreignKey: 'user_id'});
+Region.belongsTo(User, {foreignKey: 'user_id'});
+AptFilter.belongsTo(User, {foreignKey: 'user_id'});
 
 module.exports = {
   User,
   Apartment,
   AptPicture,
   Questionnaire,
+  Region,
+  AptFilter,
   sequelize,
   Sequelize
 };

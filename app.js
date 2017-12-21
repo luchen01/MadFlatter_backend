@@ -23,6 +23,8 @@ var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
 var socket = require('./routes/socket');
 var questionnaire = require('./routes/questionnaire');
+var region = require('./routes/region');
+var filters = require('./routes/apartmentFilters');
 
 // var scraper = require('./routes/scraper');
 var app = express();
@@ -192,6 +194,8 @@ app.use('/', apt);
 app.use('/', socket);
 app.use('/', scraper);
 app.use('/', questionnaire);
+app.use('/', region);
+app.use('/', filters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
