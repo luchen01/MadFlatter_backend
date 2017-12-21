@@ -189,8 +189,7 @@ passport.use(new GoogleStrategy({
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', apt);
-app.use('/', socket);
-app.use('/', scraper);
+// app.use('/', scraper);
 app.use('/', questionnaire);
 
 // catch 404 and forward to error handler
@@ -224,11 +223,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.sequelize.sync({force: true}).then(function(){
+// db.sequelize.sync({force: true}).then(function(){
   var port = process.env.PORT || 3000;
   app.listen(port);
   console.log('Express started. Listening on port %s', port);
-})
+// })
 
 
 module.exports = app;
