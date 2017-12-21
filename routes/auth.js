@@ -17,7 +17,7 @@ module.exports = function(passport) {
       password: req.body.password,
       email: req.body.email,
       birthday: req.body.birthday,
-      groupId: 1
+      groupid: 1
     })
       .then(()=>res.send('Success!'))
       .catch(err=>console.log(err));
@@ -34,7 +34,7 @@ module.exports = function(passport) {
 
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
-    res.redirect("http://localhost:3030/#/profile/" + req.user.dataValues.id);
+    res.redirect("http://localhost:3030/profile/" + req.user.dataValues.id);
   })
 
   router.get('/auth/google',
@@ -43,7 +43,7 @@ module.exports = function(passport) {
   router.get('/auth/google/callback',
     passport.authenticate('google'),
     function(req, res) {
-      res.redirect("http://localhost:3030/#/profile/" + req.user.dataValues.id);
+      res.redirect("http://localhost:3030/profile/" + req.user.dataValues.id);
     });
 
 

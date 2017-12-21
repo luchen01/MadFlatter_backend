@@ -157,6 +157,27 @@ const AptPicture = sequelize.define('aptpicture', {
 Apartment.belongsTo(User, {foreignKey: 'poster_id'});
 AptPicture.belongsTo(Apartment, {foreignKey: 'apartment_id'});
 
+const Messages = sequelize.define('messages', {
+  roomId: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  timeStamp: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  // user: {
+  //   type: Sequelize.STRING,
+  //   allowNull: true
+  // },
+  content: {
+    type: Sequelize.TEXT,
+    allowNull: true
+  }
+});
+
+Messages.belongsTo(User, {foreignKey: 'user_id'});
+
 const Questionnaire = sequelize.define('questionnaire', {
   q1: {
     type: Sequelize.INTEGER,
@@ -248,6 +269,7 @@ module.exports = {
   // YOUR CODE HERE
   User,
   Apartment,
+  Messages,
   AptPicture,
   sequelize,
   Sequelize

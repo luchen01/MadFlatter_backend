@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 var User = require('../models').User;
+var Messages = require('../models').Messages;
+var sequelize = require('../models').sequelize;
 var apartmentsApi = require('./apartmentsApi');
 
 
@@ -27,12 +29,13 @@ router.use(function(req, res, next){
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes
 
+
 router.post('/myprofile', function(req, res){
   console.log("inside my profile", req.body)
   User.findById(req.body.userid)
   .then(user=>{
     // console.log('find user', user);
-    res.send(user)
+    res.send({profileUser: user, currentUser: req.user});
   })
   .catch(err=>console.log(err))
 })
@@ -64,6 +67,41 @@ router.post('/leavegroup', function(req, res){
   .catch(err=>console.log(err))
 })
 
+router.post('/getMessage', function(req, res){
+  console.log('get message');
+  Messages.findAll({
+    where: {
+      roomId: req.body.roomId
+    },
+    include: [{
+      model: User,
+      as: 'user',
+      attributes: ['username'],
+        foreignKey: 'user_id'
+    }]
+  }, {order: sequelize.col('createdAt')})
+  .then(resp=>{
+    console.log('inside getMessages', resp);
+    res.send(resp);
+  })
+  .catch(err=>console.log(err))
+})
+
+router.post('/newMessage', function(req, res){
+  console.log("inside new Message", req.body);
+  Messages.create({
+    roomId: req.body.roomId,
+    user: req.body.user,
+    timeStamp: req.body.timeStamp,
+    content: req.body.content,
+    user_id: req.body.user_id
+  })
+  .then((message)=>{
+    console.log("resp in message", message);
+    res.send(message);
+  })
+  .catch(err=>console.log(err));
+})
 
 ///////////////////////////// END OF PRIVATE ROUTES /////////////////////////////
 
