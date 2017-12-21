@@ -157,6 +157,27 @@ const AptPicture = sequelize.define('aptpicture', {
 Apartment.belongsTo(User, {foreignKey: 'poster_id'});
 AptPicture.belongsTo(Apartment, {foreignKey: 'apartment_id'});
 
+const Messages = sequelize.define('messages', {
+  roomId: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  timeStamp: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  // user: {
+  //   type: Sequelize.STRING,
+  //   allowNull: true
+  // },
+  content: {
+    type: Sequelize.TEXT,
+    allowNull: true
+  }
+});
+
+Messages.belongsTo(User, {foreignKey: 'user_id'});
+
 const Questionnaire = sequelize.define('questionnaire', {
     '1_personal': Sequelize.INTEGER,
     '1_others': Sequelize.INTEGER,
@@ -200,13 +221,37 @@ const Questionnaire = sequelize.define('questionnaire', {
     '20_others': Sequelize.INTEGER
 });
 
+const Region = sequelize.define('regions', {
+    north: Sequelize.FLOAT,
+    south: Sequelize.FLOAT,
+    east: Sequelize.FLOAT,
+    west: Sequelize.FLOAT,
+    time: Sequelize.BIGINT
+});
+
+const AptFilter = sequelize.define('aptfilter', {
+    maxBed: Sequelize.INTEGER,
+    minBed: Sequelize.INTEGER,
+    maxBath: Sequelize.INTEGER,
+    minBath: Sequelize.INTEGER,
+    maxDate: Sequelize.DATE,
+    minDate: Sequelize.DATE,
+    minPrice: Sequelize.INTEGER,
+    maxPrice: Sequelize.INTEGER,
+})
+
 Questionnaire.belongsTo(User, {foreignKey: 'user_id'});
+Region.belongsTo(User, {foreignKey: 'user_id'});
+AptFilter.belongsTo(User, {foreignKey: 'user_id'});
 
 module.exports = {
   User,
   Apartment,
+  Messages,
   AptPicture,
   Questionnaire,
+  Region,
+  AptFilter,
   sequelize,
   Sequelize
 };

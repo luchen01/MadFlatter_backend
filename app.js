@@ -15,7 +15,6 @@ var User = require('./models').User;
 var Apartment = require('./models').Apartment;
 var AptPicture = require('./models').AptPicture;
 var sequelize = require('./models').sequelize;
-// var cors = require('cors');
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
@@ -23,7 +22,8 @@ var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
 var socket = require('./routes/socket');
 var questionnaire = require('./routes/questionnaire');
-
+var region = require('./routes/region');
+var filters = require('./routes/apartmentFilters');
 // var scraper = require('./routes/scraper');
 var app = express();
 // app.use(function(req, res, next) {
@@ -32,11 +32,6 @@ var app = express();
 //   next();
 // });
 
-
-// app.use(cors({
-//   origin: '*',
-//   credentials: true
-// }));
 
 app.use(function(req, res, next){
   // res.header("Access-Control-Allow-Origin", "http://www.google.com");
@@ -50,20 +45,6 @@ app.use(function(req, res, next){
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
 })
-// app.use(function(req, res, next) {
-//   console.log('inside access-control headers origin', req.headers.origin);
-//   res.header('Access-Control-Allow-Credentials', true);
-//   res.header('Access-Control-Allow-Origin', req.headers.origin);
-//   res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
-//   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-//   // console.log('res inside access control', res.header);
-//   if ('OPTIONS' == req.method) {
-//     res.sendStatus(200);
-//   } else {
-//
-//     next();
-//   }
-// })
 
 // view engine setup
 var hbs = require('express-handlebars')({
@@ -178,8 +159,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// io.on('connection', function(socket){
-// });
+// app.use('/', scraper);
 
 // app.get('/loggedin', function(req, res, next){
 //   console.log('inside get logged in', req.user);
@@ -191,6 +171,8 @@ app.use('/', routes);
 app.use('/', apt);
 // app.use('/', scraper);
 app.use('/', questionnaire);
+app.use('/', region);
+app.use('/', filters);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
