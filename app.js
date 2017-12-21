@@ -223,11 +223,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-// db.sequelize.sync({force: true}).then(function(){
+db.sequelize.sync({force: true}).then(function(){
   var port = process.env.PORT || 3000;
   app.listen(port);
   console.log('Express started. Listening on port %s', port);
-// })
+})
 
 
 module.exports = app;

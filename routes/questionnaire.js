@@ -4,7 +4,7 @@ var models = require('../models');
 var User = require('../models').User;
 var Questionnaire = models.Questionnaire;
 var apartmentsApi = require('./apartmentsApi');
-import Sequelize from 'sequelize';
+var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 router.post('/questionnaire', (req, res) => {
