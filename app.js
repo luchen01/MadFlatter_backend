@@ -18,11 +18,12 @@ var sequelize = require('./models').sequelize;
 
 var routes = require('./routes/routes');
 var auth = require('./routes/auth');
+// var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
 var questionnaire = require('./routes/questionnaire');
 var region = require('./routes/region');
 var filters = require('./routes/apartmentFilters');
-// var scraper = require('./routes/scraper');
+
 var app = express();
 
 app.use(function(req, res, next){
