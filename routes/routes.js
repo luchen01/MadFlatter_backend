@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 var User = require('../models').User;
+var Questionnaire = models.Questionnaire;
 var apartmentsApi = require('./apartmentsApi');
 
 
@@ -12,7 +13,6 @@ var apartmentsApi = require('./apartmentsApi');
 //   res.render('home');
 // });
 
-<<<<<<< HEAD
 router.get('/hello', (req, res) => {
   res.json({
     message: true
@@ -28,19 +28,17 @@ router.get('/hello', (req, res) => {
 //     return next();
 //   }
 // });
-=======
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
-router.use(function(req, res, next){
-  if (!req.user && req.method !== 'OPTIONS') {
-    console.log('not req.userrrrrrrrrrrrrrrrr');
-    res.status(404).json({success: false, message: 'req.user not found'})
-  } else {
-    console.log('returning next', req.user);
-    return next();
-  }
-});
->>>>>>> master
+// router.use(function(req, res, next){
+//   if (!req.user && req.method !== 'OPTIONS') {
+//     console.log('not req.userrrrrrrrrrrrrrrrr');
+//     res.status(404).json({success: false, message: 'req.user not found'})
+//   } else {
+//     console.log('returning next', req.user);
+//     return next();
+//   }
+// });
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes
