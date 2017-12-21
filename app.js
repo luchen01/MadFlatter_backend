@@ -20,11 +20,9 @@ var routes = require('./routes/routes');
 var auth = require('./routes/auth');
 var scraper = require('./routes/scraper');
 var apt = require('./routes/apartmentsApi');
-var socket = require('./routes/socket');
 var questionnaire = require('./routes/questionnaire');
 var region = require('./routes/region');
 var filters = require('./routes/apartmentFilters');
-// var scraper = require('./routes/scraper');
 var app = express();
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "http://localhost:3030");
@@ -205,11 +203,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.sequelize.sync({force: true}).then(function(){
+// db.sequelize.sync({force: true}).then(function(){
   var port = process.env.PORT || 3000;
   app.listen(port);
   console.log('Express started. Listening on port %s', port);
-})
+// })
 
 
 module.exports = app;

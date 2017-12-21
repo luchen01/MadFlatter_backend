@@ -50,7 +50,6 @@ const decodeQuestionnaire = dbObj => {
         var questionType = key.split('_');
         if(questionType.length === 2 && questionType[0] !== 'user'){
           if(!obj[questionType[0]]) obj[questionType[0]] = {};
-          console.log(key, dbObj[key]);
           obj[questionType[0]][questionType[1]] = dbObj[key];
         }
     })
@@ -58,30 +57,28 @@ const decodeQuestionnaire = dbObj => {
 }
 
 const matchingAlgorithm = (user1Resps, user2Resps) => {
-  let p1Total = 0;
-  let p2Sig = 0;
-  for (var i = 0; i < user1Resps; i++) {
+  let p1Total = 0, p2Sig = 0;
+  for (var i = 1; i <= 20; i++) {
     p2Sig += user2Resps[i].others;
     p1Total += user2Resps[i].others * Math.abs(user1Resps[i].personal - user2Resps[i].personal);
   }
   let p1Score = p1Total / p2Sig;
 
-  let p2Total = 0;
-  let p1Sig = 0;
-  for (var j = 0; j < user2Resps; j++) {
+  let p2Total = 0, p1Sig = 0;
+  for (var j = 1; j <= 20; j++) {
     p1Sig += user1Resps[j].others;
     p2Total += user1Resps[j].others * Math.abs(user2Resps[j].personal - user1Resps[j].personal);
   }
   let p2Score = p2Total / p1Sig;
 
-  return (5 - ((p1Score + p2Score)/2)) / 5;
+  return (5 - ((p1Score + p2Score) / 2)) / 5;
 }
 
 router.get('/matches/:userid', async (req, res) => {
     var resp = await Questionnaire.findOne({where: {user_id: req.params.userid}});
     let userResps = decodeQuestionnaire(resp.dataValues);
 
-    User.findAll({where: {user_id: {[Op.ne]: req.params.userid}}})
+    User.findAll({where: {id: {[Op.ne]: req.params.userid}}})
     .then(respo => {
       Promise.all(
         respo.map(user => {
@@ -92,9 +89,10 @@ router.get('/matches/:userid', async (req, res) => {
           })
         })
       )
-    })
-    .then(aResp => {
-      res.json({matches: aResp.sort((a,b) => a.score - b.score).slice(0,10)});
+      .then(aResp => {
+        console.log('fourth', aResp);
+        res.json({matches: aResp.sort((a,b) => b.score - a.score).slice(0,10)});
+      })
     })
     .catch(error => res.json({error: error}))
 })
