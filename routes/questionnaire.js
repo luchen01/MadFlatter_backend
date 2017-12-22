@@ -71,7 +71,7 @@ const matchingAlgorithm = (user1Resps, user2Resps) => {
   }
   let p2Score = p2Total / p1Sig;
 
-  return (5 - ((p1Score + p2Score) / 2)) / 5;
+  return (4 - ((p1Score + p2Score) / 2)) / 4;
 }
 
 router.get('/matches/:userid', async (req, res) => {
