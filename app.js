@@ -167,7 +167,6 @@ passport.use(new GoogleStrategy({
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', apt);
-app.use('/', socket);
 // app.use('/', scraper);
 app.use('/', questionnaire);
 app.use('/', region);
