@@ -32,15 +32,15 @@ router.get('/hello', (req, res) => {
 // });
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
-// router.use(function(req, res, next){
-//   if (!req.user && req.method !== 'OPTIONS') {
-//     console.log('not req.userrrrrrrrrrrrrrrrr');
-//     res.status(404).json({success: false, message: 'req.user not found'})
-//   } else {
-//     console.log('returning next', req.user);
-//     return next();
-//   }
-// });
+router.use(function(req, res, next){
+  if (!req.user && req.method !== 'OPTIONS') {
+    console.log('not req.userrrrrrrrrrrrrrrrr');
+    res.status(404).json({success: false, message: 'req.user not found'})
+  } else {
+    console.log('returning next', req.user);
+    return next();
+  }
+});
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes

@@ -50,12 +50,11 @@ router.get('/apartmentMatches/:userid', async (req, res) => {
     dateAvailableEnd: new Date(1613225248000),
   }
   var savedFilters = await Filter.findOne({
-      attributes: ['maxBed', 'minBed', 'maxBath', 'minBath', 'maxDate', 'minDate', 'maxPrice', 'minPrice'],
+      attributes: ['bedsMax', 'bedsMin', 'bathsMax', 'bathsMin', 'dateAvailableEnd', 'dateAvailableStart', 'priceMax', 'priceMin'],
       where: {user_id: req.params.userid}
     })
     .then(filters => {
-      console.log(filters.dataValues);
-      return filters.dataValues;
+      return filters ? filters.dataValues : {};
     });
 
     let searchFilters = Object.assign({}, savedFilters);
@@ -68,7 +67,7 @@ router.get('/apartmentMatches/:userid', async (req, res) => {
     where: {user_id: req.params.userid}
     })
     .then((response) => {
-      console.log('in regions response:', response);
+      // console.log('in regions response:', response);
       var regions = response.map(region =>{
         return {
           lat: {
@@ -81,7 +80,7 @@ router.get('/apartmentMatches/:userid', async (req, res) => {
           }
         }
       })
-      console.log('Regions:', regions);
+      // console.log('Regions:', regions);
       Apartment.findAll({
         where: {
           [Op.or]: regions,

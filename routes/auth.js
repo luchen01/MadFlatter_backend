@@ -6,7 +6,7 @@ var User = require('../models').User;
 module.exports = function(passport) {
 
   // GET registration page
-  
+
 
   router.post('/signup', function(req, res) {
     // validation step
@@ -35,7 +35,8 @@ module.exports = function(passport) {
 
   router.get('/auth/facebook', passport.authenticate('facebook'));
   router.get('/auth/facebook/callback', passport.authenticate('facebook', {scope: ['email', 'public_profile']}), function(req, res){
-    res.redirect("http://localhost:3030/profile/" + req.user.dataValues.id);
+    console.log(req.user);
+    res.redirect("http://localhost:3030/profile/" + req.user.id);
   })
 
   router.get('/auth/google',

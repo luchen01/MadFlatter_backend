@@ -19,11 +19,14 @@ router.post('/apartmentsByLocation', (req, res) => {
     dateAvailableEnd: new Date(1613225248000),
   }
   let searchFilters = Object.assign({}, req.body.searchFilters);
+  console.log(searchFilters);
   Object.keys(defaultFilters).map((filter) => {
+    console.log(filter);
     searchFilters[filter] = (!req.body.searchFilters[filter] || isNaN(req.body.searchFilters[filter]))
      ? defaultFilters[filter]
-     : searchFilters[filter];
+     : parseInt(searchFilters[filter]);
   })
+  console.log(searchFilters);
   var regions = req.body.regions.map((rect) => {
     return {
       lat: {
@@ -57,7 +60,7 @@ router.post('/apartmentsByLocation', (req, res) => {
     }
   })
   .then(async (apartments) => {
-    console.log(searchFilters.dateAvailableStart, searchFilters.dateAvailableEnd, apartments);
+    // console.log(searchFilters.dateAvailableStart, searchFilters.dateAvailableEnd, apartments);
     var apts = await Promise.all(apartments.map((apt) => {
       try{
         return AptPicture.findAll({
