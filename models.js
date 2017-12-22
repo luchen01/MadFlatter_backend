@@ -7,33 +7,33 @@
 // }
 //
 //connecting to Heroku database
-if (!global.hasOwnProperty('db')) {
-  var Sequelize = require('sequelize')
-    , sequelize = null }
-
-  if (process.env.DATABASE_URL) {
-    // the application is executed on Heroku ... use the postgres database
-    sequelize = new Sequelize(process.env.DATABASE_URL, {
-      dialect:  'postgres',
-      protocol: 'postgres',
-      port:     5432,
-      host:     process.env.HOST,
-      logging:  true, //false
-      dialectOptions: {
-        ssl: true
-      }
-    })
-  } else {
-    // the application is executed on the local machine ... use mysql
-    sequelize = new Sequelize('example-app-db', 'root', null)
-  }
+// if (!global.hasOwnProperty('db')) {
+//   var Sequelize = require('sequelize')
+//     , sequelize = null }
+//
+//   if (process.env.DATABASE_URL) {
+//     // the application is executed on Heroku ... use the postgres database
+//     sequelize = new Sequelize(process.env.DATABASE_URL, {
+//       dialect:  'postgres',
+//       protocol: 'postgres',
+//       port:     5432,
+//       host:     process.env.HOST,
+//       logging:  true, //false
+//       dialectOptions: {
+//         ssl: true
+//       }
+//     })
+//   } else {
+//     // the application is executed on the local machine ... use mysql
+//     sequelize = new Sequelize('example-app-db', 'root', null)
+//   }
 
 //connecting to local database
-// var Sequelize = require('sequelize');
-// var sequelize = new Sequelize(process.env.DATABASE_NAME, 'postgres', process.env.DATABASE_PASSWORD, {
-//     dialect: 'postgres',
-//     logging: false
-// });
+var Sequelize = require('sequelize');
+var sequelize = new Sequelize(process.env.DATABASE_NAME, 'postgres', process.env.DATABASE_PASSWORD, {
+    dialect: 'postgres',
+    logging: false
+});
 
 sequelize
   .authenticate()
