@@ -23,7 +23,6 @@ var apt = require('./routes/apartmentsApi');
 var questionnaire = require('./routes/questionnaire');
 var region = require('./routes/region');
 var filters = require('./routes/apartmentFilters');
-
 var app = express();
 
 app.use(function(req, res, next){
