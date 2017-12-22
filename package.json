@@ -31,7 +31,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.4.0",
     "sendgrid": "^3.0.5",
-    "sequelize": "^4.26.0",
+    "sequelize": "^4.28.6",
     "socket.io": "^2.0.4",
     "twilio": "^2.9.1",
     "underscore": "^1.8.3"
