@@ -151,12 +151,6 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-
-// app.get('/loggedin', function(req, res, next){
-//   console.log('inside get logged in', req.user);
-//     res.send(req.user);
-// })
-
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', apt);

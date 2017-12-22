@@ -23,34 +23,23 @@ router.get('/hello', (req, res) => {
 
 ///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
 
-// router.use(function(req, res, next){
-//   if (!req.user) {
-//     res.redirect("http://localhost:3030/#/login/");
-//   } else {
-//     return next();
-//   }
-// });
-///////////////////////////// END OF PUBLIC ROUTES /////////////////////////////
-
-// router.use(function(req, res, next){
-//   if (!req.user && req.method !== 'OPTIONS') {
-//     console.log('not req.userrrrrrrrrrrrrrrrr');
-//     res.status(404).json({success: false, message: 'req.user not found'})
-//   } else {
-//     console.log('returning next', req.user);
-//     return next();
-//   }
-// });
+router.use(function(req, res, next){
+  if (!req.user && req.method !== 'OPTIONS') {
+    console.log('not req.userrrrrrrrrrrrrrrrr');
+    res.status(404).json({success: false, message: 'req.user not found'})
+  } else {
+    console.log('returning next', req.user);
+    return next();
+  }
+});
 
 //////////////////////////////// PRIVATE ROUTES ////////////////////////////////
 // Only logged in users can see these routes
-
 
 router.post('/myprofile', function(req, res){
   console.log("inside my profile", req.body)
   User.findById(req.body.userid)
   .then(user=>{
-    // console.log('find user', user);
     res.send({profileUser: user, currentUser: req.user});
   })
   .catch(err=>console.log(err))

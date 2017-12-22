@@ -168,10 +168,6 @@ const Messages = sequelize.define('messages', {
     type: Sequelize.STRING,
     allowNull: true
   },
-  // user: {
-  //   type: Sequelize.STRING,
-  //   allowNull: true
-  // },
   content: {
     type: Sequelize.TEXT,
     allowNull: true
