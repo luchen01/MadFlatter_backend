@@ -83,6 +83,42 @@ router.post('/leavegroup', function(req, res){
   .catch(err=>console.log(err))
 })
 
+router.post('/myMessages', (req, res)=>{
+  console.log('inside my messages');
+  var response;
+  Messages.findAll({
+    where: {
+      user_id: req.body.userid
+    },
+    group: ["roomId"],
+    attributes: ["roomId", [sequelize.fn('COUNT', 'id'), 'MsgCount'], [sequelize.fn('max', sequelize.col('createdAt')), 'LastMsg']],
+  }, {order: sequelize.col('LastMsg')})
+  .then( async (resp)=>{
+    response = resp;
+    let otherUser = [];
+    var messengers = await Promise.all(resp.map((msg)=>{
+      try{
+      let userId = msg.roomId.split('_').filter((user)=>{return user !== req.body.userid})
+      return User.findById(parseInt(userId))
+      .then(user=>{
+        console.log('user in find by id', msg.dataValues);
+        msg.dataValues.otherUser = user.id;
+        msg.dataValues.username = user.username;
+        msg.dataValues.otherProfileUrl = user.profileUrl;
+        otherUser.push(user);
+      })
+      .catch(err=>console.log(err))
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }))
+    console.log('resp in my messages', otherUser);
+    res.send({currenUser: req.user, messages: response});
+  })
+  .catch(err=>console.log(err))
+})
+
 router.post('/getMessage', function(req, res){
   console.log('get message');
   Messages.findAll({
