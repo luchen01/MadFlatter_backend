@@ -16,6 +16,7 @@ module.exports = function(passport) {
       lastname: req.body.lastname,
       username: req.body.username,
       password: req.body.password,
+      profileUrl: "https://pbs.twimg.com/profile_images/446566229210181632/2IeTff-V.jpeg",
       email: req.body.email,
       birthday: req.body.birthday,
       groupid: 1

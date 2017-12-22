@@ -123,12 +123,13 @@ passport.use(new FacebookStrategy({
         lastname: profile.name.familyName,
         gender: profile.gender,
         username: profile.name.givenName + '_' + profile.name.familyName,
+        password: 123,
         profileUrl: profile.photos[0].value
       }
     })
     .then(response=>{
-      console.log(response[0].dataValues);
-      return cb(null, response[0].dataValues)
+      console.log(response);
+      return cb(null, response)
     })
     .catch(err=>cb(err, null));
   }
@@ -144,6 +145,7 @@ passport.use(new GoogleStrategy({
         googleToken: accessToken,
         firstname: profile.name.givenName,
         lastname: profile.name.familyName,
+        password: 123,
         username: profile.username,
         gender: profile.gender,
         profileUrl: profile.photos[0].value,
