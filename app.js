@@ -23,14 +23,7 @@ var apt = require('./routes/apartmentsApi');
 var questionnaire = require('./routes/questionnaire');
 var region = require('./routes/region');
 var filters = require('./routes/apartmentFilters');
-
 var app = express();
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:3030");
-//   // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
 
 app.use(function(req, res, next){
   // res.header("Access-Control-Allow-Origin", "http://www.google.com");
@@ -162,13 +155,6 @@ passport.use(new GoogleStrategy({
     .catch(err=>cb(err, null));
   }
 ));
-
-// app.use('/', scraper);
-
-// app.get('/loggedin', function(req, res, next){
-//   console.log('inside get logged in', req.user);
-//     res.send(req.user);
-// })
 
 app.use('/', auth(passport));
 app.use('/', routes);
