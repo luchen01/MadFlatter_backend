@@ -228,14 +228,14 @@ const Region = sequelize.define('regions', {
 });
 
 const AptFilter = sequelize.define('aptfilter', {
-    maxBed: Sequelize.INTEGER,
-    minBed: Sequelize.INTEGER,
-    maxBath: Sequelize.INTEGER,
-    minBath: Sequelize.INTEGER,
-    maxDate: Sequelize.DATE,
-    minDate: Sequelize.DATE,
-    minPrice: Sequelize.INTEGER,
-    maxPrice: Sequelize.INTEGER,
+    bedsMax: Sequelize.INTEGER,
+    bedsMin: Sequelize.INTEGER,
+    bathsMax: Sequelize.INTEGER,
+    bathsMin: Sequelize.INTEGER,
+    dateAvailableEnd: Sequelize.DATE,
+    dateAvailableStart: Sequelize.DATE,
+    priceMin: Sequelize.INTEGER,
+    priceMax: Sequelize.INTEGER
 })
 
 Questionnaire.belongsTo(User, {foreignKey: 'user_id'});
